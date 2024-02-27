@@ -1,0 +1,220 @@
+-- Create userprofiles table
+CREATE TABLE userprofiles (
+ user_id INT PRIMARY KEY IDENTITY(1,1),
+ username NVARCHAR(255) UNIQUE NOT NULL,
+ profile_photo_url NVARCHAR(255) DEFAULT 'https://picsum.photos/100',
+ bio NVARCHAR(255),
+ email NVARCHAR(30) NOT NULL,
+ created_at DATETIME2 DEFAULT CURRENT_TIMESTAMP
+);
+-- Create pictures table
+CREATE TABLE pictures (
+ photo_id INT PRIMARY KEY IDENTITY(1,1),
+ photo_url NVARCHAR(255) NOT NULL UNIQUE,
+ post_id INT NOT NULL,
+ created_at DATETIME2 DEFAULT CURRENT_TIMESTAMP,
+ size FLOAT CHECK (size < 5)
+);
+-- Create videos table
+CREATE TABLE videos (
+ video_id INT PRIMARY KEY IDENTITY(1,1),
+ video_url NVARCHAR(255) NOT NULL UNIQUE,
+ post_id INT NOT NULL,
+ created_at DATETIME2 DEFAULT CURRENT_TIMESTAMP,
+ size FLOAT CHECK (size < 10)
+);
+-- Create post table
+CREATE TABLE post (
+ post_id INT PRIMARY KEY IDENTITY(1,1),
+ photo_id INT,
+ video_id INT,
+ user_id INT NOT NULL,
+ caption NVARCHAR(200),
+ location NVARCHAR(50),
+ created_at DATETIME2 DEFAULT CURRENT_TIMESTAMP,
+ FOREIGN KEY(user_id) REFERENCES userprofiles(user_id),
+ FOREIGN KEY(photo_id) REFERENCES pictures(photo_id),
+ FOREIGN KEY(video_id) REFERENCES videos(video_id)
+);
+-- Create picturecomments table
+CREATE TABLE picturecomments (
+ comment_id INT PRIMARY KEY IDENTITY(1,1),
+ comment_text NVARCHAR(255) NOT NULL,
+ post_id INT NOT NULL,
+ user_id INT NOT NULL,
+ created_at DATETIME2 DEFAULT CURRENT_TIMESTAMP,
+ FOREIGN KEY(post_id) REFERENCES post(post_id),
+ FOREIGN KEY(user_id) REFERENCES userprofiles(user_id)
+);
+-- Create post_likes table
+CREATE TABLE post_likes (
+ user_id INT NOT NULL,
+ post_id INT NOT NULL,
+ created_at DATETIME2 DEFAULT CURRENT_TIMESTAMP,
+ FOREIGN KEY(user_id) REFERENCES userprofiles(user_id),
+ FOREIGN KEY(post_id) REFERENCES post(post_id),
+ PRIMARY KEY(user_id, post_id)
+);
+-- Create comment_likes table
+CREATE TABLE comment_likes (
+ user_id INT NOT NULL,
+ comment_id INT NOT NULL,
+ created_at DATETIME2 DEFAULT CURRENT_TIMESTAMP,
+ FOREIGN KEY(user_id) REFERENCES userprofiles(user_id),
+ FOREIGN KEY(comment_id) REFERENCES picturecomments(comment_id),
+ PRIMARY KEY(user_id, comment_id)
+);
+-- Create followings table
+CREATE TABLE followings (
+ follower_id INT NOT NULL,
+ followee_id INT NOT NULL,
+ created_at DATETIME2 DEFAULT CURRENT_TIMESTAMP,
+ FOREIGN KEY(follower_id) REFERENCES userprofiles(user_id),
+ FOREIGN KEY(followee_id) REFERENCES userprofiles(user_id),
+ PRIMARY KEY(follower_id, followee_id)
+);
+-- Create hashtags table
+CREATE TABLE hashtags (
+ hashtag_id INT PRIMARY KEY IDENTITY(1,1),
+ hashtag_name NVARCHAR(255) UNIQUE,
+ created_at DATETIME2 DEFAULT CURRENT_TIMESTAMP
+);
+-- Create hashtag_follow table
+CREATE TABLE hashtag_follow (
+ user_id INT NOT NULL,
+ hashtag_id INT NOT NULL,
+ created_at DATETIME2 DEFAULT CURRENT_TIMESTAMP,
+ FOREIGN KEY(user_id) REFERENCES userprofiles(user_id),
+ FOREIGN KEY(hashtag_id) REFERENCES hashtags(hashtag_id),
+ PRIMARY KEY(user_id, hashtag_id)
+);
+-- Create post_tags table
+CREATE TABLE post_tags (
+ post_id INT NOT NULL,
+ hashtag_id INT NOT NULL,
+ FOREIGN KEY(post_id) REFERENCES post(post_id),
+ FOREIGN KEY(hashtag_id) REFERENCES hashtags(hashtag_id),
+ PRIMARY KEY(post_id, hashtag_id)
+);
+-- Drop tables in reverse order to maintain referential integrity
+-- Drop post_tags table
+DROP TABLE IF EXISTS post_tags;
+-- Drop hashtag_follow table
+DROP TABLE IF EXISTS hashtag_follow;
+-- Drop hashtags table
+DROP TABLE IF EXISTS hashtags;
+-- Drop followings table
+DROP TABLE IF EXISTS followings;
+-- Drop comment_likes table
+DROP TABLE IF EXISTS comment_likes;
+-- Drop post_likes table
+DROP TABLE IF EXISTS post_likes;
+-- Drop picturecomments table
+DROP TABLE IF EXISTS picturecomments;
+-- Drop post table
+DROP TABLE IF EXISTS post;
+-- Drop videos table
+DROP TABLE IF EXISTS videos;
+-- Drop pictures table
+DROP TABLE IF EXISTS pictures;
+-- Drop userprofiles table
+DROP TABLE IF EXISTS userprofiles;
+All the insert commands for the below tables will come under their respective statements.
+(Showcasing single insert commands for reference)
+insert into userprofiles (username, profile_photo_url, bio, email)
+insert into followings (follower_id, followee_id)
+INSERT INTO HASHTAGS(hashtag_name)
+INSERT INTO pictures(photo_url, post_id, size)
+INSERT INTO videos(video_url, post_id, size)
+insert into post (post_id, photo_id, video_id, user_id, caption, location)
+INSERT INTO post_tags(post_id, hashtag_id)
+insert into post_likes (user_id, post_id)
+insert into bookmarks (post_id, user_id)
+insert into picturecomments (comment_text, post_id, user_id)
+insert into hashtag_follow (user_id, hashtag_id)
+insert into login (user_id, IP)
+❖ SQL up script for data load/migration
+-- Insert data into userprofiles table
+INSERT INTO userprofiles (username, profile_photo_url, bio, email, created_at)
+VALUES
+ ('john_doe', 'https://example.com/john_photo', 'Passionate about technology', 'john@example.com',
+'2023-01-01 00:00:00'),
+ -- We can add more insert statements as per our convenience;
+-- Insert data into followings table
+INSERT INTO followings (follower_id, followee_id, created_at)
+VALUES
+ (1, 2, '2023-01-01 00:00:00'),
+ -- We can add more insert statements as per our convenience;
+-- Insert data into hashtags table
+INSERT INTO hashtags (hashtag_name, created_at)
+VALUES
+ ('technology', '2023-01-01 00:00:00'),
+ -- We can add more insert statements as per our convenience;
+-- Insert data into pictures table
+INSERT INTO pictures (photo_url, post_id, size, created_at)
+VALUES
+ ('https://example.com/photo1', 1, 3.5, '2023-01-01 00:00:00'),
+ -- We can add more insert statements as per our convenience;
+-- Insert data into videos table
+INSERT INTO videos (video_url, post_id, size, created_at)
+VALUES
+ ('https://example.com/video1', 2, 8.8, '2023-01-01 00:00:00'),
+ -- We can add more insert statements as per our convenience;
+-- Insert data into post table
+INSERT INTO post (photo_id, video_id, user_id, caption, location, created_at)
+VALUES
+ (1, 2, 1, 'Exciting moments', 'City Park', '2023-01-01 00:00:00'),
+ -- We can add more insert statements as per our convenience;
+-- Insert data into post_tags table
+INSERT INTO post_tags (post_id, hashtag_id)
+VALUES
+ (1, 1),
+ -- We can add more insert statements as per our convenience;
+-- Insert data into post_likes table
+INSERT INTO post_likes (user_id, post_id, created_at)
+VALUES
+ (1, 1, '2023-01-01 00:00:00'),
+ -- We can add more insert statements as per our convenience;
+-- Insert data into bookmarks table
+INSERT INTO bookmarks (post_id, user_id, created_at)
+VALUES
+ (1, 2, '2023-01-01 00:00:00'),
+ -- We can add more insert statements as per our convenience;
+-- Insert data into picturecomments table
+INSERT INTO picturecomments (comment_text, post_id, user_id, created_at)
+VALUES
+ ('Great shot!', 1, 2, '2023-01-01 00:00:00'),
+ -- We can add more insert statements as per our convenience;
+-- Insert data into hashtag_follow table
+INSERT INTO hashtag_follow (user_id, hashtag_id, created_at)
+VALUES
+ (1, 1, '2023-01-01 00:00:00'),
+ -- We can add more insert statements as per our convenience;
+-- Insert data into login table
+INSERT INTO login (user_id, IP, created_at)
+VALUES
+ (1, '192.168.0.1', '2023-01-01 00:00:00');
+ -- We can add more insert statements as per our convenience;
+SQL DOWN script
+-- Remove data from login table
+DELETE FROM login WHERE user_id = 1 AND IP = '192.168.0.1';
+-- Remove data from hashtag_follow table
+DELETE FROM hashtag_follow WHERE user_id = 1 AND hashtag_id = 1;
+-- Remove data from picturecomments table
+DELETE FROM picturecomments WHERE comment_text = 'Great shot!' AND post_id = 1 AND
+user_id = 2;
+-- Remove data from bookmarks table
+DELETE FROM bookmarks WHERE post_id = 1 AND user_id = 2;
+-- Remove data from post_likes table
+DELETE FROM post_likes WHERE user_id = 1 AND post_id = 1;
+-- Remove data from post_tags table
+DELETE FROM post_tags WHERE post_id = 1 AND hashtag_id = 1;
+-- Remove data from post table
+DELETE FROM post WHERE photo_id = 1 AND video_id = 2 AND user_id = 1 AND caption =
+'Exciting moments' AND location = 'City Park';
+-- Remove data from videos table
+DELETE FROM videos WHERE video_url = 'https://example.com/video1' AND post_id = 2 AND size =
+8.8;
+-- Remove data from pictures table
+DELETE FROM pictures WHERE photo_url = 'https://example.com/photo1' AND post_id = 1 AND size
+= 3.5;
