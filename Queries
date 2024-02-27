@@ -1,0 +1,112 @@
+--Location of Users
+SELECT * FROM post
+WHERE location IN ('Trang ' ,'Omaha','Banff','Urzuf','Kefar
+Yona','Hawassa','Oullins','Calanogas','Avignon','Wakimachi');
+
+
+--Most Used Hashtags
+SELECT hashtag_name AS 'Trending Hashtags',
+ COUNT(post_tags.hashtag_id) AS 'Times Used'
+FROM hashtags
+Inner JOIN post_tags ON hashtags.hashtag_id = post_tags.hashtag_id
+GROUP BY hashtags.hashtag_name
+ORDER BY COUNT(post_tags.hashtag_id) DESC
+
+
+-- Users who have not posted checked in post table to find out inactive users
+SELECT user_id, username AS 'Most Inactive User'
+FROM userprofiles
+WHERE user_id NOT IN
+(SELECT user_id FROM post);
+
+
+-- Count of Logins by user
+SELECT count( distinct login.login_id) as login_counts,userprofiles.user_id, userprofiles.username
+FROM userprofiles
+LEFT JOIN login ON userprofiles.user_id = login.user_id
+group by userprofiles.user_id, userprofiles.username
+
+
+-- Most Liked Posts
+SELECT TOP 5 post_likes.user_id, post_likes.post_id, COUNT(post_likes.post_id) AS 'LikeCount'
+FROM post_likes
+JOIN post ON post.post_id = post_likes.post_id
+GROUP BY post_likes.user_id, post_likes.post_id
+ORDER BY COUNT(post_likes.post_id) DESC;
+select TOP 5 post_likes.user_id,userprofiles.username, COUNT(post_likes.post_id) AS 'LikeCount'
+FROM post_likes
+inner join userprofiles on post_likes.user_id = userprofiles.user_id
+group by post_likes.user_id , userprofiles.username
+
+
+-- Average post per user
+SELECT ROUND((COUNT(post_id) / COUNT(DISTINCT user_id) ),2) AS 'Average Post per User'
+FROM post;
+
+
+-- no. of login by per user
+SELECT userprofiles.user_id, userprofiles.username, login.login_id AS login_number
+FROM userprofiles
+RIGHT JOIN login ON userprofiles.user_id = login.user_id;
+
+
+-- User who liked every single post (CHECK FOR BOT)
+SELECT userprofiles.username, COUNT(post_likes.post_id) AS num_likes
+FROM userprofiles
+INNER JOIN post_likes ON userprofiles.user_id = post_likes.user_id
+GROUP BY userprofiles.user_id, userprofiles.username
+HAVING COUNT() = (SELECT COUNT() FROM post);
+
+
+-- Users who Never Comment
+SELECT user_id, username AS 'Users who Never Comment'
+FROM userprofiles
+WHERE user_id NOT IN (SELECT user_id FROM comments);
+
+
+-- User who commented on every post (CHECK FOR BOT)
+SELECT userprofiles.username, Count(*) AS num_comment
+FROM userprofiles
+INNER JOIN picturecomments ON picturecomments.user_id = userprofiles.user_id
+GROUP BY picturecomments.user_id
+HAVING COUNT() = (SELECT COUNT() FROM picturecomments );
+
+
+-- User Not Followed by anyone
+SELECT user_id, username AS 'User Not Followed by anyone'
+FROM userprofiles
+WHERE user_id NOT IN (SELECT followee_id FROM follows);
+
+
+-- User Not Following Anyone
+SELECT user_id, username AS 'User Not Following Anyone'
+FROM userprofiles
+WHERE user_id NOT IN (SELECT follower_id FROM follows);
+
+
+-- 13. Posted more than 2 times
+SELECT user_id, COUNT(*) AS post_count
+FROM post
+GROUP BY user_id
+HAVING COUNT(*) > 2
+ORDER BY post_count DESC;
+
+
+-- 14. Followers > 2
+SELECT followee_id, COUNT(follower_id) AS follower_count
+FROM follows
+GROUP BY followee_id
+HAVING COUNT(follower_id) > 2
+ORDER BY follower_count DESC;
+
+
+-- 15. Any specific word in comment
+SELECT *
+FROM picturecomments
+WHERE comment_text LIKE '%eco%';
+
+
+-- 16. Longest captions in post
+SELECT TOP 5 user_id, caption, LEN(post.caption) AS caption_length
+FROM post
+ORDER BY caption_length DESC
