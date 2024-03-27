@@ -52,3 +52,4 @@ management. By identifying inactive accounts, detecting bots, analyzing trending
 hashtags, providing geographical insights, and assessing user engagement, our
 goal is to equip clients with the tools they need to thrive in the ever-evolving
 digital landscape.
+![Screen 1 (1)](https://github.com/Saarthakj/Insight--Hub-Social-Media-Analysis-/assets/70252810/dfd57e74-b74c-4150-b237-55586bea7b3c)
