@@ -56,6 +56,11 @@ digital landscape.
 ![WhatsApp Image 2024-03-26 at 21 01 12](https://github.com/Saarthakj/Insight--Hub-Social-Media-Analysis-/assets/70252810/04dfa067-39bc-415e-a3d3-8a7b83b7b00b)
 ![WhatsApp Image 2024-03-26 at 21 01 12 (1)](https://github.com/Saarthakj/Insight--Hub-Social-Media-Analysis-/assets/70252810/f4067690-6070-4033-a40b-e381e4bfc99e)
 ![Screen 1 (1)](https://github.com/Saarthakj/Insight--Hub-Social-Media-Analysis-/assets/70252810/2a499485-b00f-4c07-b0b4-16d2356ec464)
+![Screen 6 (1)](https://github.com/Saarthakj/Insight--Hub-Social-Media-Analysis-/assets/70252810/4381a295-0d6c-4e21-9d73-8c6d3485c766)
+![Screen 7 (1)](https://github.com/Saarthakj/Insight--Hub-Social-Media-Analysis-/assets/70252810/aedba9c1-e9f3-4a7e-af93-28ef4b957046)
+![Screen 8 (1)](https://github.com/Saarthakj/Insight--Hub-Social-Media-Analysis-/assets/70252810/34b42db2-bba8-4163-bf0e-5c7ba56494d7)
+![Screen 9 (1)](https://github.com/Saarthakj/Insight--Hub-Social-Media-Analysis-/assets/70252810/4a15fec3-e12c-41c6-a31b-5c4ceaa5253c)
+
 
 
 
